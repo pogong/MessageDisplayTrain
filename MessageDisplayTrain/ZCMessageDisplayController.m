@@ -254,6 +254,8 @@
 
 -(void)keyboardShow:(NSNotification *)noti
 {
+	
+	
     CGRect frame = [noti.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     float time=[noti.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     [UIView animateWithDuration:time animations:^{
