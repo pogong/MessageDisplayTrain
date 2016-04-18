@@ -9,7 +9,11 @@
 #import "InputToolBar.h"
 
 @interface InputToolBar ()<UITextViewDelegate>
-
+{
+	UIButton * _voiceBtn;
+	UIButton * _expBtn;
+	UIButton * _moreBtn;
+}
 @end
 
 @implementation InputToolBar
@@ -25,6 +29,11 @@
 }
 -(void)setUpSubViews
 {
+	_voiceBtn = [[UIButton alloc]init];
+	_voiceBtn.backgroundColor = [UIColor redColor];
+	_voiceBtn.frame = CGRectMake(7, 7, 36, 36);
+	[self addSubview:_voiceBtn];
+	
     UITextView * inTextView = [[UITextView alloc]init];
     _inTextView = inTextView;
     _inTextView.delegate = self;
@@ -33,8 +42,19 @@
     _inTextView.layer.borderColor = [UIColor lightGrayColor].CGColor;
     _inTextView.layer.cornerRadius = 5.0;
     _inTextView.layer.masksToBounds = YES;
-    _inTextView.frame = CGRectMake(7, 7, MAIN_SCREEN_W - 14, 36);
+	CGFloat inTextViewX = 7+36+7;
+    _inTextView.frame = CGRectMake(7+36+7, 7, MAIN_SCREEN_W - inTextViewX - (7+36+7+36+7), 36);
     [self addSubview:_inTextView];
+	
+	_expBtn = [[UIButton alloc]init];
+	_expBtn.backgroundColor = [UIColor redColor];
+	_expBtn.frame = CGRectMake(MAIN_SCREEN_W - (36+7+36+7), 7, 36, 36);
+	[self addSubview:_expBtn];
+	
+	_moreBtn = [[UIButton alloc]init];
+	_moreBtn.backgroundColor = [UIColor redColor];
+	_moreBtn.frame = CGRectMake(MAIN_SCREEN_W - (36+7), 7, 36, 36);
+	[self addSubview:_moreBtn];
 }
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
