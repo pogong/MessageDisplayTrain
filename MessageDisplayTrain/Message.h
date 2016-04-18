@@ -12,13 +12,7 @@ typedef enum {
     kZCMessageText = 1,
     kZCMessageImage,
     kZCMessageLoc,
-    kZCMessageVoice,
-    kZCMessageShareDate,
-    kZCMessageGift,
-    kZCMessagePrivateDate,
-    kZCMessageXYCustomImageExp,
-    kZCMessageShareGroup,
-    kZCMessageShareParty,
+    kZCMessageVoice
 } MessageType;
 
 typedef enum {
@@ -28,6 +22,8 @@ typedef enum {
 } MessageSendState;
 
 @interface Message : NSObject
+
+@property(nonatomic,assign)NSInteger messageID;
 
 @property(nonatomic,assign)NSInteger postUid;
 @property(nonatomic,assign)MessageType messageType;

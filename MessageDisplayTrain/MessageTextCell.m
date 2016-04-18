@@ -20,8 +20,19 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         [self makeUpSubViews];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageReloadAct:) name:@"messageReload" object:nil];
     }
     return self;
+}
+
+-(void)messageReloadAct:(NSNotification *)noti
+{
+	NSDictionary * dic = noti.userInfo;
+	MessageFrame * messageFrame = dic[@"messageFrame"];
+	if (messageFrame.message.messageID != self.messageFrame.message.messageID) {
+		return;
+	}
+	self.messageFrame = messageFrame;
 }
 
 -(void)makeUpSubViews

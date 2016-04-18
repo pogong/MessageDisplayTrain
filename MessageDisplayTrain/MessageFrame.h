@@ -15,7 +15,6 @@
 
 @property(nonatomic,assign)MessageType messageType;
 
-
 @property(nonatomic,assign)CGRect iconF;
 @property (assign,nonatomic)CGRect bubbleF;
 @property (assign,nonatomic)CGRect labelF;

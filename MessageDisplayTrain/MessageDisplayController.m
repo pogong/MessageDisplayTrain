@@ -80,33 +80,37 @@
     Message * message = [Message new];
     message.messageType = kZCMessageText;
     message.sendState = kZCMessageWillSend;
+	
     message.messageContent = @{@"type":@1,@"text":_inputToolBar.inTextView.text};
+	[_inputToolBar.inTextView setText:nil];
+	
     message.postUid = 1111;
-    
+    message.messageID = [[NSDate date] timeIntervalSince1970];
     MessageFrame * messageFrame = [MessageFrame new];
     messageFrame.message = message;
     
-    [self addMessage:messageFrame];
-    
-    [_inputToolBar.inTextView setText:nil];
-    
-    //[self performSelector:@selector(netPartWorkWithMessage:) withObject:messageFrame afterDelay:0.15];//zc 怕什么
-    [self performSelector:@selector(netPartWorkWithMessage:) withObject:messageFrame afterDelay:0.15 inModes:@[NSDefaultRunLoopMode]];
-    
+    [self addMessage:messageFrame];//UI 添加
+
+	[self performSelector:@selector(netPartWorkWithMessage:) withObject:messageFrame afterDelay:0.25];//网络请求
+	/*
+	 tableView add Cell 与 tableView reload Cell 引起键面抖动!
+	 解决方案,通过notice的方式reload Cell的主体由cell充当(PS.这样在实际操作中更实际,因为tableView reload Cell都是刷新最后一条,做不到messageID的匹配,刷新主体是cell可以做messageID的匹配)
+	 */
 }
 
 -(void)netPartWorkWithMessage:(MessageFrame *)messageFrame
 {
-    NSInteger index = [_dataArr indexOfObject:messageFrame];
-    NSLog(@"%d",index%2);
-    if (index%2) {
-        messageFrame.message.sendState = kZCMessageSueecssSend;
-    }else{
-        messageFrame.message.sendState = kZCMessageFailSend;
-    }
-    NSIndexPath * indexPath = [NSIndexPath indexPathForRow:index inSection:0];
-    [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-    
+	NSInteger index = [_dataArr indexOfObject:messageFrame];
+	NSLog(@"%d",index%2);
+	if (index%2) {
+		messageFrame.message.sendState = kZCMessageSueecssSend;
+	}else{
+		messageFrame.message.sendState = kZCMessageFailSend;
+	}
+	
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"messageReload" object:nil userInfo:@{@"messageFrame":messageFrame}];
+	});
 }
 
 - (void)finishSendMessageWithBubbleMessageType:(MessageType)messageType {
@@ -136,18 +140,6 @@
 //
 - (void)addMessage:(MessageFrame *)messageFrame
 {
-//    WS(weakSelf);
-//    [self exChangeMessageDataSourceQueue:^{
-//        [_dataArr addObject:messageFrame];
-//        NSMutableArray *indexPaths = [NSMutableArray array];
-//        [indexPaths addObject:[NSIndexPath indexPathForRow:_dataArr.count - 1 inSection:0]];
-//        
-//        [weakSelf exMainQueue:^{
-//            [_tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
-//            [weakSelf scrollToLastCell:YES];
-//        }];
-//    }];
-    
     [_dataArr addObject:messageFrame];
     NSMutableArray *indexPaths = [NSMutableArray array];
     [indexPaths addObject:[NSIndexPath indexPathForRow:_dataArr.count - 1 inSection:0]];
