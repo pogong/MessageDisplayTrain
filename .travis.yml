@@ -9,10 +9,4 @@ stages:
 
 Build:
   stage: build
-  script:
-  - xcodebuild -project MessageDisplayTrain.xcodeproj -scheme "MessageDisplayTrain" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 6,OS=latest'
-
-Executepy:
-  stage: executepy
-  script:
-  - python3 trim.py
+  script: xcodebuild -project MessageDisplayTrain.xcodeproj -scheme "MessageDisplayTrain" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 6,OS=latest'
