@@ -1,4 +1,18 @@
 osx_image: xcode10.2.1
 language: objective-c
 xcode_project: MessageDisplayTrain.xcodeproj
-script: xcodebuild -project MessageDisplayTrain.xcodeproj -scheme "MessageDisplayTrain" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 6,OS=latest'
+
+stages:
+  - build
+  - executepy
+
+
+Build:
+  stage: build
+  script:
+  - xcodebuild -project MessageDisplayTrain.xcodeproj -scheme "MessageDisplayTrain" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 6,OS=latest'
+
+Executepy:
+  stage: executepy
+  script:
+  - python3 trim.py
